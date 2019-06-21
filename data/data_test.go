@@ -1,11 +1,9 @@
-package main
+package data
 
 import (
 	"fmt"
-	"image"
-	"image/png"
+	tf "github.com/tensorflow/tensorflow/tensorflow/go"
 	"io/ioutil"
-	"os"
 	"path"
 	"strings"
 	"testing"
@@ -27,19 +25,20 @@ func TestDataLoading(t *testing.T) {
 		}
 	}
 	fmt.Println(imageList)
-	fmt.Println(PreprocessTest(imageList[1]))
+	fmt.Println(DecodeImage(imageList[1]))
 }
 
-func PreprocessTest(imagename string) image.Image {
-	imageFile, err := os.Open(imagename)
+func TestDataShaping(t *testing.T) {
+
+	test0001 := "/Users/sanchezoleary/dev/TecoGAN/LR/calendar/0001.png"
+
+	img, err := DecodeImage(test0001)
 	if err != nil {
 		panic(err)
 	}
-	im, err := png.Decode(imageFile)
-	fmt.Println(im)
-	if err != nil {
-		panic(err)
-	}
-	return im
 
+	imgShape := tf.MakeShape(int64(img.Bounds().Max.X), int64(img.Bounds().Max.Y), 3)
+	fmt.Println(imgShape)
 }
+
+
